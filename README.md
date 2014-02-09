@@ -4,7 +4,7 @@
 
     var minify = require('connect-minify');
 
-    app.use(minify({
+    var assets = minify({
       // assets map - maps served file identifier to a list of resources
       assets: {
         "/js/main.min.js": [
@@ -18,7 +18,7 @@
         ],
         "/css/dashboard.min.css": [
           '/css/reset.css',
-          '/css/common.css'
+          '/css/common.css',
           '/css/dashboard.css'
         ] },
       // root - where resources can be found
@@ -26,6 +26,8 @@
       // default is to minify files
       disable_minification: false
     });
+
+    app.use(asstes.middleware);
 
 Then later to generate a URL:
 
@@ -39,3 +41,15 @@ Or to do the same in a template:
       <script src="<%- minifiedURL('/js/main.min.js') %>"></script>
     </head>
 
+To use with SWIG templates, set up a custom filter:
+
+    swig.setFilter('minifyURL', function(url){
+        return assets.minifiedURL(url);
+    });
+
+Then in the SWIG template use this filter to populate a variable:
+
+    {% set cssList = '/css/home.min.css'|minifyURL %}
+    {% for css in cssList %}
+    <link type="text/css" rel="stylesheet" href="{{ css }}" />
+    {% endfor %}
