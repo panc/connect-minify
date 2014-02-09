@@ -108,8 +108,12 @@ module.exports = function(opts) {
   var waiting = null;
 
   var minifiedURL = function(url) {
-    if (!cache[url]) throw new Error(util.format("cannot minify url '%s'", url));
-    return util.format('%s%s%s', opts.prefix, cache[url].hash, url);
+    if (opts.development) {
+      return opts.assets[url];
+    } else {
+      if (!cache[url]) throw new Error(util.format("cannot minify url '%s'", url));
+      return [util.format('%s%s%s', opts.prefix, cache[url].hash, url)];
+    }
   };
 
   // update the cache, upon completion will wake up all requests on the waiting queue
@@ -133,46 +137,49 @@ module.exports = function(opts) {
 
   var isMinifyUrl = prefixToRegex(opts.prefix);
 
-  return function(req, res, next) {
-    var handleRequest = function() {
-      var m = isMinifyUrl.exec(req.url);
-      // if the hashes don't match, perhaps we should emit a warning
-      if (m && m[1] && cache[m[2]] && cache[m[2]].hash === m[1]) {
-        var key = m[2];
-        res.setHeader('Cache-Control', 'public, max-age=31536000');
-        res.setHeader('Content-Type', mime.lookup(key));
+  return {
+    middleware: function(req, res, next) {
+      var handleRequest = function() {
+        var m = isMinifyUrl.exec(req.url);
+        // if the hashes don't match, perhaps we should emit a warning
+        if (m && m[1] && cache[m[2]] && cache[m[2]].hash === m[1]) {
+          var key = m[2];
+          res.setHeader('Cache-Control', 'public, max-age=31536000');
+          res.setHeader('Content-Type', mime.lookup(key));
 
-        if (!cache[key].minified) {
-          // XXX: don't compress multiple times when simultaneous requests
-          // come in
-          compressor.enqueue({
-            name: key,
-            content: cache[key].source
-          }, function (err, r) {
-            if (err) return res.send(500, "failed to generate resource");
-            delete cache[key].source;
-            cache[key].minified = r.content;
+          if (!cache[key].minified) {
+            // XXX: don't compress multiple times when simultaneous requests
+            // come in
+            compressor.enqueue({
+              name: key,
+              content: cache[key].source
+            }, function (err, r) {
+              if (err) return res.send(500, "failed to generate resource");
+              delete cache[key].source;
+              cache[key].minified = r.content;
+              res.send(200, cache[key].minified);
+            });
+          } else {
             res.send(200, cache[key].minified);
-          });
+          }
         } else {
-          res.send(200, cache[key].minified);
+          res.minifiedURL = res.locals.minifiedURL = minifiedURL;
+          next();
+        }
+      };
+
+      // lazy cache population
+      if (!cache) {
+        if (!waiting) {
+          waiting = [ handleRequest ];
+          startCacheUpdate();
+        } else {
+          waiting.push(handleRequest);
         }
       } else {
-        res.minifiedURL = res.locals.minifiedURL = minifiedURL;
-        next();
+        handleRequest();
       }
-    };
-
-    // lazy cache population
-    if (!cache) {
-      if (!waiting) {
-        waiting = [ handleRequest ];
-        startCacheUpdate();
-      } else {
-        waiting.push(handleRequest);
-      }
-    } else {
-      handleRequest();
-    }
-  };
+    },
+    minifiedURL: minifiedURL
+  }
 };
