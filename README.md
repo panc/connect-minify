@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/lloyd/connect-minify.png)](https://travis-ci.org/lloyd/connect-minify)
+[![Build Status](https://travis-ci.org/panc/connect-minify.png?branch=master)](https://travis-ci.org/panc/connect-minify)
 
 ## Usage
 
@@ -12,6 +12,10 @@
           '/js/magick.js',
           '/js/laughter.js'
         ],
+		"/bower/bower.min.js": 	[
+          '/bower_components/dummy.js',
+          '/bower_components/laughter.js'
+        ],
         "/css/home.min.css": [
           '/css/reset.css',
           '/css/home.css'
@@ -24,7 +28,12 @@
       // root - where resources can be found
       root: path.join(__dirname, '..', 'static),
       // default is to minify files
-      disable_minification: false
+      disable_minification: false,
+	  developement: true,
+	  map: {
+		'/bower_components/': '/bower/',
+		'/public/': '/'
+	  }
     });
 
     app.use(asstes.middleware);
@@ -53,3 +62,5 @@ Then in the SWIG template use this filter to populate a variable:
     {% for css in cssList %}
     <link type="text/css" rel="stylesheet" href="{{ css }}" />
     {% endfor %}
+	
+Use the 'map' property to establish a mapping between local paths and url-paths. This is only useful if the developement property is set to 'true'.

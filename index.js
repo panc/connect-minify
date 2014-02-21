@@ -109,7 +109,22 @@ module.exports = function(opts) {
 
   var minifiedURL = function(url) {
     if (opts.development) {
-      return opts.assets[url];
+			
+      var assets = opts.assets[url];
+      var urls = new Array();
+      
+      assets.forEach(function (asset) {
+
+          Object.keys(opts.map).forEach(function (m) {
+
+              var matcher = new RegExp("^" + m);
+              var url = asset.replace(matcher, opts.map[m]);
+
+              urls.push(url);
+          });
+      });
+      
+      return urls;
     } else {
       if (!cache[url]) throw new Error(util.format("cannot minify url '%s'", url));
       return [util.format('%s%s%s', opts.prefix, cache[url].hash, url)];
