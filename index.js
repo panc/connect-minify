@@ -114,14 +114,15 @@ module.exports = function(opts) {
       var urls = new Array();
       
       assets.forEach(function (asset) {
+          var url = asset;
 
           Object.keys(opts.map).forEach(function (m) {
 
               var matcher = new RegExp("^" + m);
-              var url = asset.replace(matcher, opts.map[m]);
-
-              urls.push(url);
+              url = url.replace(matcher, opts.map[m]);
           });
+
+          urls.push(url);
       });
       
       return urls;
@@ -175,7 +176,7 @@ module.exports = function(opts) {
               res.send(200, cache[key].minified);
             });
           } else {
-            res.send(200, cache[key].minified);
+              res.send(200, cache[key].source);
           }
         } else {
           res.minifiedURL = res.locals.minifiedURL = minifiedURL;
