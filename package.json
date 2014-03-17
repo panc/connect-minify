@@ -15,7 +15,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "compute-cluster": "0.0.5",
+    "compute-cluster": "panc/node-compute-cluster.git",
     "underscore": "~1.4.4",
     "uglifycss": "0.0.5",
     "uglify-js": "~1.3.4",
