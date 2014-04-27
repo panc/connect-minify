@@ -92,10 +92,10 @@ describe('middleware', function() {
     middleWare.middleware(req, res, function() {
       res.minifiedURL.should.be.a('function');
       res.locals.minifiedURL.should.be.a('function');
-      res.minifiedURL('/minified.js').should.eql(['/1927f4fa9c/minified.js']);
-      res.locals.minifiedURL('/minified.js').should.eql(['/1927f4fa9c/minified.js']);
-      res.minifiedURL('/multiple.js').should.eql(['/11721cc23b/multiple.js']);
-      res.locals.minifiedURL('/multiple.js').should.eql(['/11721cc23b/multiple.js']);
+      res.minifiedURL('/minified.js').should.eql(['/156c445f5d/minified.js']);
+      res.locals.minifiedURL('/minified.js').should.eql(['/156c445f5d/minified.js']);
+      res.minifiedURL('/multiple.js').should.eql(['/fbe9d756eb/multiple.js']);
+      res.locals.minifiedURL('/multiple.js').should.eql(['/fbe9d756eb/multiple.js']);
       done();
     });
   });
