@@ -1,15 +1,15 @@
 {
-  "author": "Lloyd Hilaiel <lloyd@hilaiel.com> (http://lloyd.io)",
-  "name": "connect-minify",
-  "description": "middleware to demand combine and minify resources",
-  "version": "0.0.1",
-  "homepage": "http://github.com/mozilla/connect-minify",
+  "author": "Christoph Pangerl",
+  "name": "connect-minify-ext",
+  "description": "Lightweight connect middleware for automagic on-the fly combination and minification of javascrip- and css-files and generation of corresponding html-file entries (for production and development).",
+  "version": "0.1.0",
+  "homepage": "https://github.com/panc/connect-minify",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mozilla/connect-minify.git"
+    "url": "https://github.com/panc/connect-minify.git"
   },
   "bugs": {
-    "url": "https://github.com/mozilla/connect-minify/issues"
+    "url": "https://github.com/panc/connect-minify/issues"
   },
   "engines": {
     "node": ">=0.8.0"
