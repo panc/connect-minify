@@ -89,13 +89,13 @@ describe('middleware', function() {
       locals: require('express/lib/utils.js').locals({})
     };
 
-    middleWare(req, res, function() {
+    middleWare.middleware(req, res, function() {
       res.minifiedURL.should.be.a('function');
       res.locals.minifiedURL.should.be.a('function');
-      res.minifiedURL('/minified.js').should.equal('/156c445f5d/minified.js');
-      res.locals.minifiedURL('/minified.js').should.equal('/156c445f5d/minified.js');
-      res.minifiedURL('/multiple.js').should.equal('/fbe9d756eb/multiple.js');
-      res.locals.minifiedURL('/multiple.js').should.equal('/fbe9d756eb/multiple.js');
+      res.minifiedURL('/minified.js').should.eql(['/1927f4fa9c/minified.js']);
+      res.locals.minifiedURL('/minified.js').should.eql(['/1927f4fa9c/minified.js']);
+      res.minifiedURL('/multiple.js').should.eql(['/11721cc23b/multiple.js']);
+      res.locals.minifiedURL('/multiple.js').should.eql(['/11721cc23b/multiple.js']);
       done();
     });
   });
@@ -121,10 +121,14 @@ describe('middleware', function() {
     };
 
     var headers = [];
-    middleWare(req, {
+    middleWare.middleware(req, {
       setHeader: function(k, v) { headers[k] = v; },
       send: function(code, content) {
         content.should.equal('console.log("this is my source file")');
+        done();
+      },
+      redirect: function(key){
+        key.should.equal('/minified.js');
         done();
       },
       locals: require('express/lib/utils.js').locals({})

@@ -111,19 +111,19 @@ module.exports = function(opts) {
     if (opts.development) {
 			
       var assets = opts.assets[url];
-      var urls = new Array();
+      var urls = [];
       
       assets.forEach(function (asset) {
           var url = asset;
 
-          Object.keys(opts.map).forEach(function (m) {
+          Object.keys(opts.map).forEach(function(m) {
 
               var matcher = new RegExp("^" + m);
               url = url.replace(matcher, opts.map[m]);
-          });
+            });
 
           urls.push(url);
-      });
+        });
       
       return urls;
     } else {
@@ -176,13 +176,13 @@ module.exports = function(opts) {
               res.send(200, cache[key].minified);
             });
           } else {
-              res.send(200, cache[key].minified);
+            res.send(200, cache[key].minified);
           }
         } else if (m && m[1]) {
-            // url is a cached url but the file has not been defined in any mapping (because file was not found in the cache)
-            // => the file must be any static content like an image
+          // url is a cached url but the file has not been defined in any mapping (because file was not found in the cache)
+          // => the file must be any static content like an image
 
-            res.redirect(m[2]);
+          res.redirect(m[2]);
             
         } else {
           res.minifiedURL = res.locals.minifiedURL = minifiedURL;
