@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/panc/connect-minify.png?branch=master)](https://travis-ci.org/panc/connect-minify)
+## About the project
+
+This project is a fork from [Lloyd's connect-minify](https://github.com/lloyd/connect-minify) project. It extends the original project by the possibility to automatically generate the html-entries for the generated and combined resource files. Furthermore it supports a debug/development mode, so that the resource files are not combined, which makes debugging much more easier.
 
 ## Usage
 
@@ -44,7 +47,9 @@ Then later to generate a URL:
       req.minifiedURL('/css/home.min.css');
     });
 
-Or to do the same in a template:
+## Usage in templates
+	
+The same can be done within a template:
 
     <head>
       <script src="<%- minifiedURL('/js/main.min.js') %>"></script>
