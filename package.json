@@ -2,7 +2,7 @@
   "author": "Christoph Pangerl",
   "name": "connect-minify-ext",
   "description": "Lightweight connect middleware for automagic on-the fly combination and minification of javascrip- and css-files and generation of corresponding html-file entries (for production and development).",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/panc/connect-minify",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "compute-cluster": "panc/node-compute-cluster.git",
+    "compute-cluster": "0.0.7",
     "underscore": "~1.4.4",
     "uglifycss": "0.0.5",
     "uglify-js": "~1.3.4",
